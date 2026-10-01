@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Постер — Похудение</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+        width: 100%;
+        min-height: 100vh;
+        background: #050505;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    /* Формат вертикального постера 9:16 */
+    .poster {
+        position: relative;
+        width: 100%;
+        max-width: 480px;
+        aspect-ratio: 9 / 16;
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow:
+            0 30px 80px rgba(0,0,0,0.8),
+            0 0 0 1px rgba(255, 107, 26, 0.25);
+        display: flex;
+        flex-direction: column;
+        padding: 22px 20px 18px;
+
+        /* ─── ФОН: КАРТИНКА ─── */
+        background-image:
+            /* Затемняющий градиент поверх фото, чтобы текст читался */
+            linear-gradient(180deg,
+                rgba(5,5,5,0.85) 0%,
+                rgba(5,5,5,0.55) 30%,
+                rgba(5,5,5,0.55) 55%,
+                rgba(5,5,5,0.9) 100%),
+            /* Тёплый оранжевый отсвет */
+            radial-gradient(ellipse at 50% 45%, rgba(255, 107, 26, 0.22), transparent 65%),
+            /* САМА КАРТИНКА */
+            url('bg-poster.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    /* Тонкие энергетические линии поверх фона */
+    .poster::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            repeating-linear-gradient(
+                115deg,
+                transparent 0,
+                transparent 40px,
+                rgba(255, 107, 26, 0.04) 40px,
+                rgba(255, 107, 26, 0.04) 41px
+            );
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    /* Молнии-росчерки */
+    .spark {
+        position: absolute;
+        background: linear-gradient(90deg, transparent, #FF6B1A, transparent);
+        height: 2px;
+        box-shadow: 0 0 12px rgba(255, 107, 26, 0.9);
+        z-index: 2;
+    }
+    .spark-1 { top: 9%;  left: -5%; width: 45%; transform: rotate(-12deg); }
+    .spark-2 { top: 12%; right: -5%; width: 38%; transform: rotate(10deg); }
+    .spark-3 { bottom: 34%; left: -6%; width: 32%; transform: rotate(8deg); opacity: 0.7; }
+    .spark-4 { bottom: 38%; right: -6%; width: 30%; transform: rotate(-10deg); opacity: 0.7; }
+
+    /* ─── ВЕРХ: логотип места ─── */
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 10px;
+        letter-spacing: 3px;
+        color: rgba(255,255,255,0.55);
+        text-transform: uppercase;
+        font-weight: 700;
+        z-index: 3;
+    }
+    .top-bar .dot { color: #FF6B1A; }
+
+    /* ─── ЗАГОЛОВОК ─── */
+    .headline {
+        margin-top: 18px;
+        z-index: 3;
+    }
+
+    .eyebrow {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        color: #FF6B1A;
+        padding: 5px 12px;
+        border: 1.5px solid rgba(255, 107, 26, 0.5);
+        border-radius: 100px;
+        background: rgba(10, 10, 10, 0.55);
+        backdrop-filter: blur(4px);
+        margin-bottom: 12px;
+        text-transform: uppercase;
+    }
+
+    .title {
+        font-size: 34px;
+        font-weight: 900;
+        line-height: 1.02;
+        letter-spacing: -0.5px;
+        text-transform: uppercase;
+        text-shadow: 0 4px 24px rgba(0,0,0,0.9), 0 0 30px rgba(0,0,0,0.7);
+    }
+
+    .title .orange {
+        color: #FF6B1A;
+        text-shadow: 0 0 30px rgba(255, 107, 26, 0.9), 0 4px 20px rgba(0,0,0,0.9);
+    }
+
+    /* ─── ЦЕНТР: свободная зона для фото ─── */
+    .visual {
+        flex: 1;
+        position: relative;
+        z-index: 3;
+    }
+
+    /* ─── ИНФОГРАФИКА 2×2 ─── */
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        z-index: 3;
+        margin-bottom: 12px;
+    }
+
+    .tile {
+        padding: 10px 10px;
+        border: 1.5px solid rgba(255, 107, 26, 0.5);
+        border-radius: 12px;
+        background: rgba(10, 10, 10, 0.65);
+        backdrop-filter: blur(6px);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.4s ease;
+    }
+
+    .tile-icon {
+        flex-shrink: 0;
+        width: 26px;
+        height: 26px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #FF6B1A, #cc4a00);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        box-shadow: 0 0 14px rgba(255, 107, 26, 0.5);
+    }
+
+    .tile-text {
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1.15;
+        color: #f2f2f2;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+    }
+
+    /* ─── ИТОГ ─── */
+    .result {
+        text-align: center;
+        font-size: 15px;
+        font-weight: 800;
+        line-height: 1.2;
+        margin-bottom: 12px;
+        z-index: 3;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-shadow: 0 2px 12px rgba(0,0,0,0.9);
+    }
+    .result .num {
+        color: #FF6B1A;
+        font-size: 20px;
+        text-shadow: 0 0 20px rgba(255, 107, 26, 0.9), 0 2px 12px rgba(0,0,0,0.9);
+    }
+
+    /* ─── CTA ─── */
+    .cta {
+        display: block;
+        text-align: center;
+        padding: 14px 16px;
+        background: linear-gradient(135deg, #FF6B1A, #d94f00);
+        border-radius: 14px;
+        font-size: 13px;
+        font-weight: 900;
+        letter-spacing: 0.8px;
+        color: #fff;
+        text-transform: uppercase;
+        text-decoration: none;
+        box-shadow:
+            0 0 30px rgba(255, 107, 26, 0.6),
+            0 6px 20px rgba(255, 107, 26, 0.4);
+        animation: ctaPulse 2s ease-in-out infinite;
+        z-index: 3;
+        line-height: 1.3;
+    }
+
+    .cta .promo {
+        display: block;
+        font-size: 15px;
+        letter-spacing: 2px;
+        margin-top: 4px;
+    }
+
+    @keyframes ctaPulse {
+        0%, 100% { box-shadow: 0 0 30px rgba(255, 107, 26, 0.6), 0 6px 20px rgba(255, 107, 26, 0.4); }
+        50%      { box-shadow: 0 0 55px rgba(255, 107, 26, 1),   0 6px 30px rgba(255, 107, 26, 0.6); }
+    }
+
+    /* ─── ТЕЛЕФОН ─── */
+    .phone {
+        display: block;
+        text-align: center;
+        margin-top: 10px;
+        font-size: 15px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        color: #fff;
+        text-decoration: none;
+        z-index: 3;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+    }
+    .phone .label {
+        display: block;
+        font-size: 9px;
+        letter-spacing: 2px;
+        color: rgba(255,255,255,0.55);
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-bottom: 2px;
+    }
+    .phone .number {
+        color: #FF6B1A;
+        text-shadow: 0 0 18px rgba(255, 107, 26, 0.8), 0 2px 10px rgba(0,0,0,0.9);
+    }
+
+    /* ─── Дисклеймер ─── */
+    .disclaimer {
+        position: absolute;
+        bottom: 6px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 7.5px;
+        color: rgba(255,255,255,0.35);
+        text-align: center;
+        width: 90%;
+        line-height: 1.3;
+        z-index: 3;
+        text-shadow: 0 2px 6px rgba(0,0,0,0.9);
+    }
+
+    /* ─── Адаптив ─── */
+    @media (max-width: 400px) {
+        .title { font-size: 28px; }
+        .tile-text { font-size: 10px; }
+        .result { font-size: 13px; }
+        .result .num { font-size: 17px; }
+        .cta { font-size: 11px; padding: 12px; }
+        .cta .promo { font-size: 13px; }
+        .phone { font-size: 13px; }
+    }
+</style>
+</head>
+<body>
+
+<div class="poster">
+
+    <div class="spark spark-1"></div>
+    <div class="spark spark-2"></div>
+    <div class="spark spark-3"></div>
+    <div class="spark spark-4"></div>
+
+    <!-- Верхняя строка -->
+    <div class="top-bar">
+        <span>Биоэнергомассаж <span class="dot">•</span> Курс для фигуры</span>
+        <span>7–30 дней</span>
+    </div>
+
+    <!-- Заголовок -->
+    <div class="headline">
+        <div class="eyebrow">Тренируешься, а вес стоит?</div>
+        <div class="title">
+            Живот, бока<br>
+            и целлюлит<br>
+            <span class="orange">не уходят?</span>
+        </div>
+    </div>
+
+    <!-- Свободная зона: там на фоне видно фото -->
+    <div class="visual"></div>
+
+    <!-- Инфографика 2×2 -->
+    <div class="grid">
+        <div class="tile">
+            <div class="tile-icon">🔥</div>
+            <div class="tile-text">Ускоряет метаболизм</div>
+        </div>
+        <div class="tile">
+            <div class="tile-icon">💧</div>
+            <div class="tile-text">Разгоняет лимфу, убирает отёки</div>
+        </div>
+        <div class="tile">
+            <div class="tile-icon">🌀</div>
+            <div class="tile-text">Прорабатывает целлюлит</div>
+        </div>
+        <div class="tile">
+            <div class="tile-icon">✨</div>
+            <div class="tile-text">Подтягивает кожу и рельеф</div>
+        </div>
+    </div>
+
+    <!-- Итог -->
+    <div class="result">
+        Курс <span class="num">7–30 дней</span> —<br>и форма меняется
+    </div>
+
+    <!-- CTA -->
+    <a href="tel:+79881434998" class="cta">
+        Запишись на сеанс
+        <span class="promo">по промокоду VEZDE</span>
+    </a>
+
+    <!-- Телефон -->
+    <a href="tel:+79881434998" class="phone">
+        <span class="label">Позвони и запишись</span>
+        <span class="number">+7 988 143-49-98</span>
+    </a>
+
+    <!-- Дисклеймер -->
+    <div class="disclaimer">
+        Не является лекарством. Есть противопоказания.<br>
+        Не заменяет консультацию врача.
+    </div>
+
+</div>
+
+</body>
+</html>
